@@ -42,5 +42,30 @@ def terminal_emulator():
         except Exception as e:
             print(f"Error: {e}")
 
+def terminal_emulator_batch(commands):
+    for command in commands:
+        try:
+            # Изменение на использование Popen для обработки ввода
+            process = subprocess.Popen(command, shell=True, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+            
+            # Чтение вывода в реальном времени
+            while True:
+                output = process.stdout.readline()
+                if output == '' and process.poll() is not None:
+                    break
+                if output:
+                    print(output.strip())
+            
+            # Обработка ошибок
+            stderr = process.stderr.read()
+            if stderr:
+                print(f"Err: {stderr.strip()}")
+                
+        except Exception as e:
+            print(f"Error: {e}")
+
 if __name__ == "__main__":
-    terminal_emulator()
+    # terminal_emulator()
+    terminal_emulator_batch([
+        "ls -l"
+    ])
