@@ -67,5 +67,7 @@ def terminal_emulator_batch(commands):
 if __name__ == "__main__":
     # terminal_emulator()
     terminal_emulator_batch([
-        "ls -l"
+        "ifconfig",
+        "ip addr",
+        "curl -s \"myexternalip.com/raw\""
     ])

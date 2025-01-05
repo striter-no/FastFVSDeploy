@@ -11,7 +11,12 @@ def do(cmd: str) -> str:
         print(f"Error executing command: {cmd}")
         print(f"Error details: {str(e)}")
 
+def raw(listcmds: list[str]) -> list[str]:
+    return [do(cmd) for cmd in listcmds]
+
 if __name__ == "__main__":
-    print(do(
-        "ls -l"
-    ))
+    print("\n".join(raw([
+        "ifconfig",
+        "ip addr",
+        "curl -s \"myexternalip.com/raw\""
+    ])))
