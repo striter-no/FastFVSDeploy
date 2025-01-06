@@ -75,5 +75,3 @@ if __name__ == "__main__":
         "ip addr",
         "curl -s \"myexternalip.com/raw\""
     ])
-
-    #import os;os.system("zsh")
