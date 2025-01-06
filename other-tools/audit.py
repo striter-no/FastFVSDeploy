@@ -50,14 +50,14 @@ async def find_files_and_directories():
                 # input(permissions)
             except Exception as e:
                 with open('./log.txt', 'a') as log_file:
-                    log_file.write(f"Ошибка доступа к {path}: {str(e)}\n")
+                    log_file.write(f"Ошибка доступа к {path}: {str(e)}\\n")
                 continue
             await check_permissions(permissions, path, processed_items)
             processed_items += 1
             # total_items+=1
         
-            # print(f"\rПрогресс: {processed_items/total_items*100:.2f}%", end='')  # Обновляем прогресс-бар
-            # print(f"\rПрогресс: {processed_items}", end='')  # Обновляем прогресс-бар
+            # print(f"\\rПрогресс: {processed_items/total_items*100:.2f}%", end='')  # Обновляем прогресс-бар
+            # print(f"\\rПрогресс: {processed_items}", end='')  # Обновляем прогресс-бар
     # print()  # Переход на новую строку после завершения
 
 async def main():
@@ -69,6 +69,6 @@ if __name__ == "__main__":
     with open("insecure.txt", "w") as f:
         sorted_insecure = sorted(global_insecure, key=lambda x: (x[1] != '1777', x[1] != '1775', x[1] != '777', x[1] != '775'))
         for (path, perm) in sorted_insecure:
-            f.write(f"{perm}: {path}\n")
+            f.write(f"{perm}: {path}\\n")
 
-    print(f"\nОбнаружено неправильных прав доступа к {len(global_insecure)} ({len(global_insecure)/total_items*100:.2f}%) директориям/файлам:")
+    print(f"\\nОбнаружено неправильных прав доступа к {len(global_insecure)} ({len(global_insecure)/total_items*100:.2f}%) директориям/файлам:")

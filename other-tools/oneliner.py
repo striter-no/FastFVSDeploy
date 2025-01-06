@@ -1,6 +1,7 @@
 # terminals/oneliner.py
 
 import sys
+import pyperclip
 
 def main():
     if len(sys.argv) != 2:
@@ -14,7 +15,8 @@ def main():
 
     # Формируем строку с exec
     result = f'exec("""{code}""")'
-    print(result)
+    pyperclip.copy(result)
+    print("Copied")
 
 if __name__ == "__main__":
     main()
