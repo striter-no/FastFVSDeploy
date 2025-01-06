@@ -15,8 +15,7 @@ if [ -f "$keys_dir" ]; then
     exit 2
 fi
 
-cat << EOF
-HostKey $keys_dir/ssh_host_rsa_key
+echo "HostKey $keys_dir/ssh_host_rsa_key
 HostKey $keys_dir/ssh_host_ecdsa_key
 HostKey $keys_dir/ssh_host_ed25519_key
 PubkeyAuthentication yes
@@ -27,6 +26,5 @@ UsePAM yes
 X11Forwarding yes
 PrintMotd no
 AcceptEnv LANG LC_*
-Subsystem       sftp    /usr/lib/openssh/sftp-server
-EOF
+Subsystem       sftp    /usr/lib/openssh/sftp-server" > $keys_dir/sshd_config
 
