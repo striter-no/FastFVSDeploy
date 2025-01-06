@@ -19,6 +19,9 @@ cat << EOF
 HostKey $keys_dir/ssh_host_rsa_key
 HostKey $keys_dir/ssh_host_ecdsa_key
 HostKey $keys_dir/ssh_host_ed25519_key
+PubkeyAuthentication yes
+PasswordAuthentication no
+AuthorizedKeysFile $keys_dir/authorized_keys
 ChallengeResponseAuthentication no
 UsePAM yes
 X11Forwarding yes
