@@ -51,14 +51,14 @@ def scan_ip(target_ip, ports):
 if __name__ == "__main__":
 
     parser = argparse.ArgumentParser(description='network SYN scan')
-    parser.add_argument('target', help='Target IP address')
-    # parser.add_argument('--ports', nargs='+', type=int, help='Ports to scan', default=[80, 443])
+    parser.add_argument('--target', help='Target IP address')
+    parser.add_argument('--ports', nargs='+', type=int, help='Ports to scan', default=[80, 443])
     args = parser.parse_args()
 
     # target = "192.168.31.1"  # Замените на целевой IP
     # ports_to_scan = [22, 80, 443]  # Замените на порты для сканирования
     
     target = args.target
-    ports_to_scan = [22, 80, 443]  
+    ports_to_scan = args.ports  
 
     print(scan_ip(target, ports_to_scan))
