@@ -1,4 +1,4 @@
-import socket
+import scapy.all as scapy
 import subprocess
 import platform
 import ipaddress
@@ -9,42 +9,31 @@ def ping(host):
     command = ['ping', param, '1', host]
     return subprocess.call(command) == 0
 
-def scan_ports(host, ports):
-    """Сканирует указанные порты на заданном хосте."""
-    open_ports = []
-    for port in ports:
-        try:
-            sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            sock.settimeout(1)  # Устанавливаем таймаут в 1 секунду
-            result = sock.connect_ex((host, port))  # Пытаемся подключиться к порту
-            print(f"Result: {result}")
-            if result == 0:  # Если результат равен 0, порт открыт
-                open_ports.append(port)
-            sock.close()  # Закрываем сокет
-        except socket.error as e:
-            print(f"Ошибка при подключении к {host}:{port} - {e}")
-    return open_ports
+import scapy.all as scapy
+
+def syn_scan(ip, port):
+    packet = scapy.IP(dst=ip) / scapy.TCP(dport=port, flags='S')
+    response = scapy.sr1(packet, timeout=1, verbose=0)
+    if response:
+        if response.haslayer(scapy.TCP):
+            if response.getlayer(scapy.TCP).flags == 0x12:  # SYN-ACK
+                return True
+    return False
 
 def main(network):
-    """Основная функция сканирования сети."""
-    print(f"Сканирование сети: {network}")
-    # Генерируем адреса в указанной сети
+    print(f"Scanning network: {network}")
     for ip in ipaddress.IPv4Network(network):
         if ping(str(ip)):
-            print(f"{str(ip)} - доступен")
-            # Сканируем порты 22 (SSH), 80 (HTTP), 443 (HTTPS)
-            open_ports = scan_ports(str(ip), [22, 80, 443])
+            print(f"{str(ip)} - available")
+            open_ports = []
+            for port in [22, 80, 443]:  # Scan specific ports
+                if syn_scan(str(ip), port):
+                    open_ports.append(port)
             if open_ports:
-                print(f"Открытые порты на {str(ip)}: {open_ports}")
+                print(f"Open ports on {str(ip)}: {open_ports}")
             else:
-                print(f"Нет открытых портов на {str(ip)}")
+                print(f"No open ports on {str(ip)}")
 
 if __name__ == "__main__":
-    target = "3.87.167.154"  # Замените на целевой IP
-    ports_to_scan = [i for i in range(0, 65535)]  # Замените на порты для сканирования
-    scaned_ports = scan_ports(target, ports_to_scan)
-    for port in ports_to_scan:
-        if port in scaned_ports:
-            print(f"Port {port} is open")
-        else:
-            print(f"Port {port} is closed/filtered")
+    target = "3.87.167.154"  # Replace with target IP
+    main(ipaddress.IPv4Network(target + '/32'))
